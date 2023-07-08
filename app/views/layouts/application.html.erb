@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MusicApp</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <%= csrf_meta_tags %>
+        <%= csp_meta_tag %>
+
+        <%= stylesheet_link_tag "application" %>
+    </head>
+    
+    <body>
+        <div class="main-content">
+            <h1 class="main-logo">Music App</h1>
+            
+            <nav>
+                <% if logged_in? %>
+                    <a class="button" href="<%= bands_url %>">Home</a>
+
+                    <div class="user-detail">
+                        <p>Welcome, <%= current_user.email %></p>
+                        <form class="form" action="<%= session_url %>" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                            <input type="submit" value="Log Out!">
+                        </form>
+                    </div>
+                <% else %>
+                    <a href="<%= new_session_url %>">Log In</a>
+                    <a href="<%= new_user_url %>">Sign Up</a>
+                <% end %>
+            </nav> 
+        
+            <% if flash[:notice] %>
+                <% flash[:notice].each do |notice| %>
+                    <p class="messages"><%= notice %></p>
+                <% end %>
+            <% end %>
+
+            <%= yield %>
+
+            <% if flash[:errors] %>
+                <% flash[:errors].each do |error| %>
+                    <p class="messages"><%= error %></p>
+                <% end %>
+            <% end %>
+        </div>
+    </body>
+</html>
